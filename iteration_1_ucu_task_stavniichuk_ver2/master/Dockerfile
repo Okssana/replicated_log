@@ -1,0 +1,17 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+
+RUN pip install --no-cache-dir -r requirements.txt \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends curl iputils-ping \
+    && rm -rf /var/lib/apt/lists/* \
+    && adduser --disabled-password --gecos '' oksana_user
+
+COPY . .
+
+USER oksana_user 
+
+CMD ["python", "master.py"]
