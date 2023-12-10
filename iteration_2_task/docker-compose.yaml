@@ -1,0 +1,64 @@
+version: '3.8'
+
+networks: 
+  my_network:
+    driver: bridge
+
+services:
+  master:
+    image: master:v1.0
+    build: ./master 
+    environment:
+      - PORT=5000  
+    ports:
+      - "5000:5000"
+    networks:  
+      - my_network
+    healthcheck:   
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    command: ["python", "master.py", "5000"]
+  
+  secondary1:
+    image: secondary1:v1.0
+    build: 
+      context: ./secondary
+      dockerfile: Dockerfile_secondary1
+    environment:
+      - PORT=5001
+      - DELAY=5 # Artificial delay in seconds
+    ports:
+      - "5001:5001"
+    networks:  
+      - my_network
+    healthcheck:   
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+    command: ["python", "secondary1.py", "5001"]
+    depends_on:
+      - master
+
+  secondary2:
+    image: secondary2:v1.0
+    build: 
+      context: ./secondary
+      dockerfile: Dockerfile_secondary2
+    environment:
+      - PORT=5002
+      - DELAY=5 # Artificial delay in seconds
+    ports:
+      - "5002:5002"
+    networks:  
+      - my_network
+    healthcheck:   
+      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+    command: ["python", "secondary2.py", "5002"]
+    depends_on:
+      - master

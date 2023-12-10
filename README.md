@@ -1,1 +1,42 @@
 # replicated_log
+
+
+
+"""
+Secondary servers should expose an HTTP API that supports GET methods and a replication endpoint for the Master to POST messages to.
+
+When a message is received from the Master, it should be added to the Secondary's log and an ACK should be sent back.
+
+Ensure that the secondary server is running on the port specified in your master server code (5001 in this case).
+
+
+Secondary Server: The secondary server(s) are meant to replicate the data from the master server. If you're running the secondary server on the same machine as the master server, it needs to use a different port. In the example, it's set to run on port 5001
+
+"""
+
+"""
+Secondary servers should expose an HTTP API that supports GET methods and a replication endpoint for the Master to POST messages to.
+When a message is received from the Master, it should be added to the Secondary's log and an ACK should be sent back.
+
+Ensure that the secondary server is running on the port specified in your master server code (5001 in this case).
+
+
+Secondary Server: The secondary server(s) are meant to replicate the data from the master server. If you're running the secondary server on the same machine as the master server, it needs to use a different port. In the example, it's set to run on port 5001
+
+"""
+
+
+"""
+Localhost =  http://127.0.0.1
+
+http://localhost:5001/messages = http://127.0.0.1:5000/messages
+"""
+
+
+"""
+This is the application that you interact with to post new messages and get all messages.
+"""
+
+
+> * http://127.0.0.1:5000/messages
+> * http://127.0.0.1:5000/messages -- for testing purposes
